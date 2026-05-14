@@ -30,9 +30,8 @@ Instalar dependencias:
 ```bash
 npm install
 ```
-##Configuración de la base de datos
 
-## Configuración
+## Configuración de la base de datos
 
 crea una base de datos en postgreSql:
 
