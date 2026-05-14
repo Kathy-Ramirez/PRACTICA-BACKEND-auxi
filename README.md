@@ -77,7 +77,7 @@ npm run start:prod
 
 ## Ejecucion del proyecto(scalar)
 
-Para hacer correr el proyecto scalar, ejecutar el siguiente comando:
+Para hacer correr el proyecto scalar, ejecutar el siguiente codigo en cualquier navegador:
 
 ```bash
 http://localhost:3000/scalar
