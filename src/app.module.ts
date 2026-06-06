@@ -1,14 +1,3 @@
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-
-// @Module({
-//   imports: [],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-// export class AppModule {}
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientesModule } from './clientes/clientes.module';
@@ -16,18 +5,28 @@ import { CategoriasModule } from './categorias/categorias.module';
 import { ProductosModule } from './productos/productos.module';
 import { OrdenesModule } from './ordenes/ordenes.module';
 import { OrdenProductoModule } from './orden_producto/orden_producto.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'k2026',
-      database: 'tienda_online',
-      autoLoadEntities: true,
-      synchronize: true, // PARA CREAR TABLAS DE FROMA AUTOMTICA, NO USAR EN PRODUCCION
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config) => ({
+        type: 'postgres',
+        host: config.get('DB_HOST'),
+        port: config.get('DB_PORT'),
+        username: config.get('DB_USER'),
+        password: config.get('DB_PASSWORD'),
+        database: config.get('DB_NAME'),
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
+      inject: [ConfigModule],
     }),
     ClientesModule,
     CategoriasModule,
@@ -35,5 +34,7 @@ import { OrdenProductoModule } from './orden_producto/orden_producto.module';
     OrdenesModule,
     OrdenProductoModule,
   ],
+  controllers: [AppController], 
+  providers: [AppService],
 })
 export class AppModule {}
