@@ -7,7 +7,7 @@ import { OrdenesModule } from './ordenes/ordenes.module';
 import { OrdenProductoModule } from './orden_producto/orden_producto.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,17 +16,17 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (config) => ({
+      useFactory: async (config: ConfigService) => ({
         type: 'postgres',
         host: config.get('DB_HOST'),
-        port: config.get('DB_PORT'),
-        username: config.get('DB_USER'),
+        port: Number(config.get('DB_PORT')),
+        username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
-        database: config.get('DB_NAME'),
+        database: config.get('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
       }),
-      inject: [ConfigModule],
+      inject: [ConfigService],
     }),
     ClientesModule,
     CategoriasModule,
